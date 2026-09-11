@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SRS Польский B1: Слепой лист</title>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #131d2e;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-active: #0284c7;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --border: #23354d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 12px 12px calc(24px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 2px;
+    }
+
+    h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    select {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+      width: 100%;
+    }
+
+    .dashboard-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .dash-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .dash-label {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .dash-stats {
+      display: flex;
+      gap: 12px;
+    }
+
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+
+    .stat-badge.success {
+      color: var(--success);
+    }
+
+    .stat-badge.danger {
+      color: var(--danger);
+    }
+
+    .stat-badge.neutral {
+      color: var(--text-muted);
+    }
+
+    .progress-bar-container {
+      background: var(--bg);
+      border-radius: 4px;
+      height: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .progress-bar {
+      background: var(--accent);
+      height: 100%;
+      width: 0%;
+      transition: width 0.25s ease;
+    }
+
+    .sheet-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .sheet-card.state-success {
+      border-color: var(--success);
+      background-color: rgba(34, 197, 94, 0.06);
+    }
+
+    .sheet-card.state-error {
+      border-color: var(--danger);
+      background-color: rgba(239, 68, 68, 0.06);
+      animation: shake 0.35s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .sheet-prompt-box {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .sheet-prompt-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .sheet-prompt {
+      font-size: 1.25rem;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .input-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      color: var(--text);
+      padding: 14px 12px;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      outline: none;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+    }
+
+    input[type="text"].input-success {
+      border-color: var(--success) !important;
+      background-color: rgba(34, 197, 94, 0.12);
+      color: #86efac;
+    }
+
+    input[type="text"].input-error {
+      border-color: var(--danger) !important;
+      background-color: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+    }
+
+    .main-btn {
+      background: var(--accent);
+      color: #090d16;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 1rem;
+      width: 100%;
+      transition: background 0.15s;
+    }
+
+    .main-btn:active {
+      background: var(--accent-active);
+    }
+
+    .main-btn.btn-success {
+      background: var(--success);
+      color: #052e16;
+    }
+
+    .main-btn.btn-error {
+      background: var(--danger);
+      color: #450a0a;
+    }
+
+    .keyboard-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .char-btn {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px 0;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .char-btn:active {
+      background: var(--border);
+    }
+
+    .feedback-box {
+      display: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+
+    .feedback-box.success {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid var(--success);
+      color: #86efac;
+    }
+
+    .feedback-box.error {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid var(--danger);
+      color: #fca5a5;
+    }
+
+    .feedback-header {
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.85rem;
+    }
+
+    .comp-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .comp-label {
+      color: var(--text-muted);
+    }
+
+    .comp-value {
+      font-weight: 600;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Польский B1: SRS</h1>
+    <div class="header-actions">
+      <button type="button" class="btn-secondary" onclick="resetSessionStats()">Сброс сессии</button>
+      <button type="button" class="btn-secondary" onclick="resetProgress()">Сброс раздела</button>
+    </div>
+  </header>
+
+  <div class="controls-grid">
+    <div class="control-group">
+      <label for="sectionSelect">Раздел</label>
+      <select id="sectionSelect"></select>
+    </div>
+    <div class="control-group">
+      <label for="directionSelect">Направление</label>
+      <select id="directionSelect">
+        <option value="ru-pl">RU → PL (Слепой лист)</option>
+        <option value="pl-ru">PL → RU</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="dashboard-panel">
+    <div class="dash-row">
+      <span class="dash-label">Текущая сессия</span>
+      <div class="dash-stats">
+        <span class="stat-badge success">✓ <span id="sessionCorrect">0</span></span>
+        <span class="stat-badge danger">✕ <span id="sessionWrong">0</span></span>
+        <span class="stat-badge neutral">Всего: <span id="sessionTotal">0</span></span>
+      </div>
+    </div>
+    <div class="dash-row" style="margin-top: 4px;">
+      <span class="dash-label">Общий прогресс раздела</span>
+      <div class="dash-stats">
+        <span class="stat-badge neutral">Осталось: <b id="wordsRemaining" style="color: var(--text);">0</b></span>
+        <span class="stat-badge neutral">Выучено: <span id="overallRatio">0 / 0</span></span>
+      </div>
+    </div>
+    <div class="progress-bar-container">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+  </div>
+
+  <div class="sheet-card" id="cardContainer">
+    <div class="sheet-prompt-box">
+      <div id="promptSideLabel" class="sheet-prompt-label">Русский</div>
+      <div id="promptTerm" class="sheet-prompt">...</div>
+    </div>
+
+    <div class="keyboard-grid" id="diacriticsBar">
+      <button type="button" class="char-btn" onpointerdown="insertChar('ą', event)">ą</button>
+      <button type="button" class="char-btn" onpointerdown="insertChar('ć', event)">ć</button>
+      <button type="button" class="char-btn" onpointerdown="insertChar('ę', event)">ę</button>
+      <button type="button" class="char-btn" onpointerdown="insertChar('ł', event)">ł</button>
+      <button type="button" class="char-btn" onpointerdown="insertChar('ń', event)">ń</button>
+      <button type="button" class="char-btn" onpointerdown="insertChar('ó', event)">ó</button>
+      <button type="button" class="char-btn" onpointerdown="insertChar('ś', event)">ś</button>
+      <button type="button" class="char-btn" onpointerdown="insertChar('ź', event)">ź</button>
+      <button type="button" class="char-btn" onpointerdown="insertChar('ż', event)">ż</button>
+    </div>
+
+    <form id="quizForm" onsubmit="handleAnswer(event)">
+      <div class="input-row">
+        <input type="text" id="userInput" placeholder="Напишите перевод..." autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" inputmode="text" required>
+        <button type="submit" id="actionBtn" class="main-btn">Проверить</button>
+      </div>
+    </form>
+
+    <div id="feedbackBox" class="feedback-box"></div>
+  </div>
+</div>
+
+<script>
+const VOCABULARY_DATA = [
+  { s: "1. Wygląd i ciało", pl: "blady", ru: "бледный" },
+  { s: "1. Wygląd i ciało", pl: "broda", ru: "борода / подбородок" },
+  { s: "1. Wygląd i ciało", pl: "cera", ru: "цвет лица, кожа лица" },
+  { s: "1. Wygląd i ciało", pl: "chudy / szczupły", ru: "худой / стройный" },
+  { s: "1. Wygląd i ciało", pl: "ciemnoskóry", ru: "темнокожий" },
+  { s: "1. Wygląd i ciało", pl: "czoło", ru: "лоб" },
+  { s: "1. Wygląd i ciało", pl: "dojrzały", ru: "зрелый" },
+  { s: "1. Wygląd i ciało", pl: "drobny", ru: "мелкий, миниатюрный" },
+  { s: "1. Wygląd i ciało", pl: "długość", ru: "длина" },
+  { s: "1. Wygląd i ciało", pl: "fryzura", ru: "прическа" },
+  { s: "1. Wygląd i ciało", pl: "gardło", ru: "горло" },
+  { s: "1. Wygląd i ciało", pl: "grzywka", ru: "челка" },
+  { s: "1. Wygląd i ciało", pl: "kręcony / kędzierzawy", ru: "кудрявый" },
+  { s: "1. Wygląd i ciało", pl: "krągły", ru: "круглый" },
+  { s: "1. Wygląd i ciało", pl: "kończyna", ru: "конечность" },
+  { s: "1. Wygląd i ciało", pl: "kostka", ru: "лодыжка, косточка" },
+  { s: "1. Wygląd i ciało", pl: "kręgosłup", ru: "позвоночник" },
+  { s: "1. Wygląd i ciało", pl: "kształt", ru: "форма" },
+  { s: "1. Wygląd i ciało", pl: "łysy / łysina", ru: "лысый / лысина" },
+  { s: "1. Wygląd i ciało", pl: "mięsień", ru: "мышца" },
+  { s: "1. Wygląd i ciało", pl: "noga / stopa", ru: "нога / стопа" },
+  { s: "1. Wygląd i ciało", pl: "otyły / otyłość", ru: "тучный / ожирение" },
+  { s: "1. Wygląd i ciało", pl: "piegi", ru: "веснушки" },
+  { s: "1. Wygląd i ciało", pl: "pięść", ru: "кулак" },
+  { s: "1. Wygląd i ciało", pl: "plecy", ru: "спина" },
+  { s: "1. Wygląd i ciało", pl: "policzek", ru: "щека" },
+  { s: "1. Wygląd i ciało", pl: "postać / sylwetka", ru: "фигура, силуэт" },
+  { s: "1. Wygląd i ciało", pl: "prostować", ru: "выпрямлять" },
+  { s: "1. Wygląd i ciało", pl: "przystojny", ru: "привлекательный" },
+  { s: "1. Wygląd i ciało", pl: "ramię / bark", ru: "плечо" },
+  { s: "1. Wygląd i ciało", pl: "rumieniec", ru: "румянец" },
+  { s: "1. Wygląd i ciało", pl: "rudy / ruda", ru: "рыжий" },
+  { s: "1. Wygląd i ciało", pl: "szatyn / szatynka", ru: "шатен / шатенка" },
+  { s: "1. Wygląd i ciało", pl: "twarz", ru: "лицо" },
+  { s: "1. Wygląd i ciało", pl: "waga", ru: "вес" },
+  { s: "1. Wygląd i ciało", pl: "wargi / usta", ru: "губы / рот" },
+  { s: "1. Wygląd i ciało", pl: "wąsy", ru: "усы" },
+  { s: "1. Wygląd i ciało", pl: "włosy proste / falowane", ru: "прямые / волнистые волосы" },
+  { s: "1. Wygląd i ciało", pl: "wzrost", ru: "рост" },
+  { s: "1. Wygląd i ciało", pl: "zmarszczka", ru: "морщина" },
+  { s: "1. Wygląd i ciało", pl: "krępy", ru: "коренастый" },
+  { s: "1. Wygląd i ciało", pl: "żebro", ru: "ребро" },
+  { s: "1. Cechy charakteru", pl: "ambitny", ru: "амбициозный" },
+  { s: "1. Cechy charakteru", pl: "bezczelny", ru: "наглый" },
+  { s: "1. Cechy charakteru", pl: "bezradny", ru: "беспомощный" },
+  { s: "1. Cechy charakteru", pl: "cierpliwy / niecierpliwy", ru: "терпеливый / нетерпеливый" },
+  { s: "1. Cechy charakteru", pl: "ciekawy / ciekawski", ru: "любознательный / любопытный" },
+  { s: "1. Cechy charakteru", pl: "czuły", ru: "нежный, чувствительный" },
+  { s: "1. Cechy charakteru", pl: "dokładny", ru: "точный, аккуратный" },
+  { s: "1. Cechy charakteru", pl: "dowcipny", ru: "остроумный" },
+  { s: "1. Cechy charakteru", pl: "drobiazgowy", ru: "педантичный, мелочный" },
+  { s: "1. Cechy charakteru", pl: "dumny", ru: "гордый" },
+  { s: "1. Cechy charakteru", pl: "dyskretny", ru: "сдержанный, тактичный" },
+  { s: "1. Cechy charakteru", pl: "egoistyczny / samolubny", ru: "эгоистичный" },
+  { s: "1. Cechy charakteru", pl: "gadatliwy", ru: "болтливый" },
+  { s: "1. Cechy charakteru", pl: "hojny / szczodry", ru: "щедрый" },
+  { s: "1. Cechy charakteru", pl: "kreatywny", ru: "творческий" },
+  { s: "1. Cechy charakteru", pl: "leniwy / leń", ru: "ленивый / лентяй" },
+  { s: "1. Cechy charakteru", pl: "lojalny / nielojalny", ru: "верный / неверный" },
+  { s: "1. Cechy charakteru", pl: "nieśmiały", ru: "робкий, застенчивый" },
+  { s: "1. Cechy charakteru", pl: "obowiązkowy", ru: "обязательный, исполнительный" },
+  { s: "1. Cechy charakteru", pl: "odpowiedzialny / bezmyślny", ru: "ответственный / легкомысленный" },
+  { s: "1. Cechy charakteru", pl: "odważny / tchórzliwy", ru: "смелый / трусливый" },
+  { s: "1. Cechy charakteru", pl: "opanowany", ru: "хладнокровный, сдержанный" },
+  { s: "1. Cechy charakteru", pl: "opiekuńczy", ru: "заботливый" },
+  { s: "1. Cechy charakteru", pl: "oszczędny / skąpy", ru: "экономный / скупой" },
+  { s: "1. Cechy charakteru", pl: "pewny siebie", ru: "уверенный в себе" },
+  { s: "1. Cechy charakteru", pl: "pomocny / usłużny", ru: "готовый помочь" },
+  { s: "1. Cechy charakteru", pl: "pracowity", ru: "трудолюбивый" },
+  { s: "1. Cechy charakteru", pl: "prostolinijny", ru: "прямолинейный" },
+  { s: "1. Cechy charakteru", pl: "przewrażliwiony", ru: "сверхчувствительный" },
+  { s: "1. Cechy charakteru", pl: "rozsądny / bezmyślny", ru: "разумный / неразумный" },
+  { s: "1. Cechy charakteru", pl: "samodzielny", ru: "самостоятельный" },
+  { s: "1. Cechy charakteru", pl: "skromny", ru: "скромный" },
+  { s: "1. Cechy charakteru", pl: "spontaniczny", ru: "спонтанный" },
+  { s: "1. Cechy charakteru", pl: "spostrzegawczy", ru: "наблюдательный" },
+  { s: "1. Cechy charakteru", pl: "spokojny / nerwowy", ru: "спокойный / нервный" },
+  { s: "1. Cechy charakteru", pl: "stanowczy", ru: "решительный, твердый" },
+  { s: "1. Cechy charakteru", pl: "szczery / nieszczery", ru: "искренний / неискренний" },
+  { s: "1. Cechy charakteru", pl: "troskliwy", ru: "заботливый" },
+  { s: "1. Cechy charakteru", pl: "uczciwy / nieuczciwy", ru: "честный / нечестный" },
+  { s: "1. Cechy charakteru", pl: "uparty", ru: "упрямый" },
+  { s: "1. Cechy charakteru", pl: "uprzejmy / niegrzeczny", ru: "вежливый / грубый" },
+  { s: "1. Cechy charakteru", pl: "wrażliwy", ru: "чувствительный, чуткий" },
+  { s: "1. Cechy charakteru", pl: "wstydliwy", ru: "стыдливый" },
+  { s: "1. Cechy charakteru", pl: "wygadany", ru: "бойкий на язык" },
+  { s: "1. Cechy charakteru", pl: "wyrozumiały", ru: "понимающий" },
+  { s: "1. Cechy charakteru", pl: "zarozumiały", ru: "высокомерный" },
+  { s: "1. Cechy charakteru", pl: "zazdrosny", ru: "ревнивый, завистливый" },
+  { s: "1. Cechy charakteru", pl: "złośliwy", ru: "ехидный, злобный" },
+  { s: "1. Cechy charakteru", pl: "zrównoważony", ru: "уравновешенный" },
+  { s: "1. Cechy charakteru", pl: "życzliwy", ru: "доброжелательный" },
+  { s: "1. Emocje", pl: "bezradność", ru: "беспомощность" },
+  { s: "1. Emocje", pl: "gniew / złość", ru: "гнев / злость" },
+  { s: "1. Emocje", pl: "lęk / strach", ru: "тревога / страх" },
+  { s: "1. Emocje", pl: "nadzieja", ru: "надежда" },
+  { s: "1. Emocje", pl: "niepokój", ru: "беспокойство" },
+  { s: "1. Emocje", pl: "oburzenie", ru: "возмущение" },
+  { s: "1. Emocje", pl: "odraza / obrzydzenie", ru: "отвращение" },
+  { s: "1. Emocje", pl: "poczucie winy", ru: "чувство вины" },
+  { s: "1. Emocje", pl: "pogarda", ru: "презрение" },
+  { s: "1. Emocje", pl: "radość", ru: "радость" },
+  { s: "1. Emocje", pl: "rozczarowanie / zawód", ru: "разочарование" },
+  { s: "1. Emocje", pl: "rozpacz", ru: "отчаяние" },
+  { s: "1. Emocje", pl: "satysfakcja / zadowolenie", ru: "удовлетворение" },
+  { s: "1. Emocje", pl: "smutek / żal", ru: "грусть / сожаление" },
+  { s: "1. Emocje", pl: "spokój", ru: "спокойствие" },
+  { s: "1. Emocje", pl: "tęsknota", ru: "тоска" },
+  { s: "1. Emocje", pl: "ulga", ru: "облегчение" },
+  { s: "1. Emocje", pl: "wściekłość", ru: "ярость" },
+  { s: "1. Emocje", pl: "wstyd", ru: "стыд" },
+  { s: "1. Emocje", pl: "zaskoczenie / zdziwienie", ru: "удивление" },
+  { s: "1. Emocje", pl: "zazdrość", ru: "зависть / ревность" },
+  { s: "2. Relacje i rodzina", pl: "bliźnięta", ru: "близнецы" },
+  { s: "2. Relacje i rodzina", pl: "dogadywać się / dogadać się", ru: "находить общий язык" },
+  { s: "2. Relacje i rodzina", pl: "dyskutować / pokłócić się", ru: "дискутировать / поссориться" },
+  { s: "2. Relacje i rodzina", pl: "jedynak / jedynaczka", ru: "единственный ребенок" },
+  { s: "2. Relacje i rodzina", pl: "kłótnia / spór", ru: "ссора / спор" },
+  { s: "2. Relacje i rodzina", pl: "krewny / krewna", ru: "родственник / родственница" },
+  { s: "2. Relacje i rodzina", pl: "małżeństwo / związek", ru: "брак / отношения" },
+  { s: "2. Relacje i rodzina", pl: "mieć pretensje do kogoś", ru: "иметь претензии к кому-то" },
+  { s: "2. Relacje i rodzina", pl: "narzeczony / narzeczona", ru: "жених / невеста" },
+  { s: "2. Relacje i rodzina", pl: "odwiedzać / odwiedzić", ru: "навещать / навестить" },
+  { s: "2. Relacje i rodzina", pl: "opieka nad dzieckiem", ru: "уход за ребенком" },
+  { s: "2. Relacje i rodzina", pl: "partner / partnerka", ru: "партнер / партнерша" },
+  { s: "2. Relacje i rodzina", pl: "pogodzić się z kimś", ru: "помириться с кем-то" },
+  { s: "2. Relacje i rodzina", pl: "pokolenie", ru: "поколение" },
+  { s: "2. Relacje i rodzina", pl: "polegać na kimś", ru: "полагаться на кого-то" },
+  { s: "2. Relacje i rodzina", pl: "przyjaciel / przyjaźń", ru: "друг / дружба" },
+  { s: "2. Relacje i rodzina", pl: "rodzeństwo", ru: "братья и сестры" },
+  { s: "2. Relacje i rodzina", pl: "rozstać się / zerwać", ru: "расстаться / разорвать отношения" },
+  { s: "2. Relacje i rodzina", pl: "rozwód / rozwieść się", ru: "развод / развестись" },
+  { s: "2. Relacje i rodzina", pl: "szacunek / szanować", ru: "уважение / уважать" },
+  { s: "2. Relacje i rodzina", pl: "szwagier / szwagierka", ru: "деверь, шурин / золовка" },
+  { s: "2. Relacje i rodzina", pl: "teść / teściowa", ru: "тесть, свекор / теща, свекровь" },
+  { s: "2. Relacje i rodzina", pl: "ufać / zaufanie", ru: "доверять / доверие" },
+  { s: "2. Relacje i rodzina", pl: "wspierać / wsparcie", ru: "поддерживать / поддержка" },
+  { s: "2. Relacje i rodzina", pl: "wychowywać dzieci", ru: "воспитывать детей" },
+  { s: "2. Relacje i rodzina", pl: "więzi rodzinne", ru: "семейные узы" },
+  { s: "2. Relacje i rodzina", pl: "zakochać się", ru: "влюбиться" },
+  { s: "2. Relacje i rodzina", pl: "znajomy / znajomość", ru: "знакомый / знакомство" },
+  { s: "2. Relacje i rodzina", pl: "zaręczyny / zaręczyć się", ru: "помолвка / обручиться" },
+  { s: "2. Relacje i rodzina", pl: "zięć / synowa", ru: "зять / невестка" },
+  { s: "3. Państwa i języki", pl: "Austria", ru: "Австрия" },
+  { s: "3. Państwa i języki", pl: "Białoruś", ru: "Беларусь" },
+  { s: "3. Państwa i języki", pl: "Chiny", ru: "Китай" },
+  { s: "3. Państwa i języki", pl: "Czechy", ru: "Чехия" },
+  { s: "3. Państwa i języki", pl: "Francja", ru: "Франция" },
+  { s: "3. Państwa i języki", pl: "Grecja", ru: "Греция" },
+  { s: "3. Państwa i języki", pl: "Hiszpania", ru: "Испания" },
+  { s: "3. Państwa i języki", pl: "Holandia", ru: "Нидерланды" },
+  { s: "3. Państwa i języki", pl: "Japonia", ru: "Япония" },
+  { s: "3. Państwa i języki", pl: "Kanada", ru: "Канада" },
+  { s: "3. Państwa i języki", pl: "Litwa", ru: "Литва" },
+  { s: "3. Państwa i języki", pl: "Niemcy", ru: "Германия" },
+  { s: "3. Państwa i języki", pl: "Norwegia", ru: "Норвегия" },
+  { s: "3. Państwa i języki", pl: "Polska", ru: "Польша" },
+  { s: "3. Państwa i języki", pl: "Słowacja", ru: "Словакия" },
+  { s: "3. Państwa i języki", pl: "Stany Zjednoczone", ru: "США" },
+  { s: "3. Państwa i języki", pl: "Szwajcaria", ru: "Швейцария" },
+  { s: "3. Państwa i języki", pl: "Szwecja", ru: "Швеция" },
+  { s: "3. Państwa i języki", pl: "Turcja", ru: "Турция" },
+  { s: "3. Państwa i języki", pl: "Ukraina", ru: "Украина" },
+  { s: "3. Państwa i języki", pl: "Wielka Brytania", ru: "Великобритания" },
+  { s: "3. Państwa i języki", pl: "Włochy", ru: "Италия" },
+  { s: "4. Ekologia", pl: "biodegradowalny", ru: "биоразлагаемый" },
+  { s: "4. Ekologia", pl: "degradacja środowiska", ru: "деградация среды" },
+  { s: "4. Ekologia", pl: "dziura ozonowa", ru: "озоновая дыра" },
+  { s: "4. Ekologia", pl: "efekt cieplarniany", ru: "парниковый эффект" },
+  { s: "4. Ekologia", pl: "elektrownia słoneczna / wiatrowa", ru: "солнечная / ветровая электростанция" },
+  { s: "4. Ekologia", pl: "emisja spalin / gazów", ru: "выбросы выхлопных газов" },
+  { s: "4. Ekologia", pl: "energia odnawialna (OZE)", ru: "ВИЭ" },
+  { s: "4. Ekologia", pl: "gatunek zagrożony", ru: "вид под угрозой вымирания" },
+  { s: "4. Ekologia", pl: "klęska ekologiczna", ru: "экологическая катастрофа" },
+  { s: "4. Ekologia", pl: "kwaśny deszcz", ru: "кислотный дождь" },
+  { s: "4. Ekologia", pl: "ocieplenie klimatu", ru: "потепление климата" },
+  { s: "4. Ekologia", pl: "ochrona przyrody", ru: "охрана природы" },
+  { s: "4. Ekologia", pl: "odpady komunalne", ru: "бытовые отходы" },
+  { s: "4. Ekologia", pl: "oszczędzanie energii / wody", ru: "экономия энергии / воды" },
+  { s: "4. Ekologia", pl: "panele fotowoltaiczne", ru: "солнечные панели" },
+  { s: "4. Ekologia", pl: "park narodowy / rezerwat", ru: "нацпарк / заповедник" },
+  { s: "4. Ekologia", pl: "recykling / utylizacja", ru: "переработка / утилизация" },
+  { s: "4. Ekologia", pl: "segregacja śmieci", ru: "сортировка мусора" },
+  { s: "4. Ekologia", pl: "smog / jakość powietrza", ru: "смог / качество воздуха" },
+  { s: "4. Ekologia", pl: "substancje toksyczne", ru: "токсичные вещества" },
+  { s: "4. Ekologia", pl: "ślad węglowy", ru: "углеродный след" },
+  { s: "4. Ekologia", pl: "ścieki przemysłowe", ru: "промышленные стоки" },
+  { s: "4. Ekologia", pl: "tworzywa sztuczne (plastik)", ru: "пластмассы" },
+  { s: "4. Ekologia", pl: "wysypisko śmieci", ru: "свалка" },
+  { s: "4. Ekologia", pl: "zanieczyszczenie gleby / wód", ru: "загрязнение почвы / вод" },
+  { s: "4. Ekologia", pl: "zasoby naturalne", ru: "природные ресурсы" },
+  { s: "5. Dom i mieszkanie", pl: "balkon / taras", ru: "балкон / терраса" },
+  { s: "5. Dom i mieszkanie", pl: "czynsz", ru: "арендная плата / квартплата" },
+  { s: "5. Dom i mieszkanie", pl: "dach", ru: "крыша" },
+  { s: "5. Dom i mieszkanie", pl: "drzwi antywłamaniowe", ru: "бронированные двери" },
+  { s: "5. Dom i mieszkanie", pl: "działka", ru: "земельный участок" },
+  { s: "5. Dom i mieszkanie", pl: "elewacja", ru: "фасад здания" },
+  { s: "5. Dom i mieszkanie", pl: "garaż", ru: "гараж" },
+  { s: "5. Dom i mieszkanie", pl: "gospodarstwo domowe", ru: "домашнее хозяйство" },
+  { s: "5. Dom i mieszkanie", pl: "kaucja", ru: "залог" },
+  { s: "5. Dom i mieszkanie", pl: "klatka schodowa", ru: "лестничная клетка" },
+  { s: "5. Dom i mieszkanie", pl: "korytarz / przedpokój", ru: "коридор / прихожая" },
+  { s: "5. Dom i mieszkanie", pl: "kuchnia w aneksie", ru: "кухня-ниша" },
+  { s: "5. Dom i mieszkanie", pl: "lokator / najemca", ru: "жилец / арендатор" },
+  { s: "5. Dom i mieszkanie", pl: "metraż / powierzchnia", ru: "метраж / площадь" },
+  { s: "5. Dom i mieszkanie", pl: "nieruchomość", ru: "недвижимость" },
+  { s: "5. Dom i mieszkanie", pl: "odkurzacz", ru: "пылесос" },
+  { s: "5. Dom i mieszkanie", pl: "ogrzewanie podłogowe", ru: "напольное отопление" },
+  { s: "5. Dom i mieszkanie", pl: "ogrodzenie / płot", ru: "забор" },
+  { s: "5. Dom i mieszkanie", pl: "parter / piętro", ru: "первый этаж / этаж" },
+  { s: "5. Dom i mieszkanie", pl: "piekarnik", ru: "духовка" },
+  { s: "5. Dom i mieszkanie", pl: "piwnica / strych", ru: "подвал / чердак" },
+  { s: "5. Dom i mieszkanie", pl: "pralka / zmywarka", ru: "стиральная / посудомоечная машина" },
+  { s: "5. Dom i mieszkanie", pl: "przeprowadzka", ru: "переезд" },
+  { s: "5. Dom i mieszkanie", pl: "remont", ru: "ремонт" },
+  { s: "5. Dom i mieszkanie", pl: "salon / sypialnia", ru: "гостиная / спальня" },
+  { s: "5. Dom i mieszkanie", pl: "umowa najmu", ru: "договор аренды" },
+  { s: "5. Dom i mieszkanie", pl: "winda", ru: "лифт" },
+  { s: "5. Dom i mieszkanie", pl: "wieżowiec / blok", ru: "высотка / блочный дом" },
+  { s: "5. Dom i mieszkanie", pl: "właściciel", ru: "собственник" },
+  { s: "5. Dom i mieszkanie", pl: "gotować / smażyć / piec", ru: "варить / жарить / печь" },
+  { s: "5. Dom i mieszkanie", pl: "odkurzać / zamiatać", ru: "пылесосить / подметать" },
+  { s: "5. Dom i mieszkanie", pl: "prasować", ru: "гладить" },
+  { s: "5. Dom i mieszkanie", pl: "robić porządki / sprzątać", ru: "наводить порядок" },
+  { s: "5. Dom i mieszkanie", pl: "segregować śmieci", ru: "сортировать мусор" },
+  { s: "5. Dom i mieszkanie", pl: "ścielić łóżko", ru: "застилать кровать" },
+  { s: "5. Dom i mieszkanie", pl: "ścierać kurze", ru: "вытирать пыль" },
+  { s: "5. Dom i mieszkanie", pl: "wietrzyć pokój", ru: "проветривать комнату" },
+  { s: "5. Dom i mieszkanie", pl: "wynajmować / wynająć", ru: "снимать / сдать" },
+  { s: "6. Praca i finanse", pl: "awans / awansować", ru: "повышение / получить повышение" },
+  { s: "6. Praca i finanse", pl: "bankomat / wpłatomat", ru: "банкомат / терминал приема" },
+  { s: "6. Praca i finanse", pl: "bezrobocie / bezrobotny", ru: "безработица / безработный" },
+  { s: "6. Praca i finanse", pl: "dług / dłużnik", ru: "долг / должник" },
+  { s: "6. Praca i finanse", pl: "dochód / прихód", ru: "доход / выручка" },
+  { s: "6. Praca i finanse", pl: "doświadczenie zawodowe", ru: "опыт работы" },
+  { s: "6. Praca i finanse", pl: "dział kadr (HR)", ru: "отдел кадров" },
+  { s: "6. Praca i finanse", pl: "emerytura / rencista", ru: "пенсия / льготник" },
+  { s: "6. Praca i finanse", pl: "etat (pełny / niepełny)", ru: "ставка (полная / неполная)" },
+  { s: "6. Praca i finanse", pl: "godziny nadliczbowe", ru: "сверхурочные часы" },
+  { s: "6. Praca i finanse", pl: "karta debetowa / kredytowa", ru: "дебетовая / кредитная карта" },
+  { s: "6. Praca i finanse", pl: "konto bankowe", ru: "банковский счет" },
+  { s: "6. Praca i finanse", pl: "kredyt hipoteczny", ru: "ипотека" },
+  { s: "6. Praca i finanse", pl: "kwalifikacje", ru: "квалификация" },
+  { s: "6. Praca i finanse", pl: "list motywacyjny", ru: "сопроводительное письмо" },
+  { s: "6. Praca i finanse", pl: "lokata bankowa", ru: "банковский вклад" },
+  { s: "6. Praca i finanse", pl: "negocjacje", ru: "переговоры" },
+  { s: "6. Praca i finanse", pl: "obowiązki służbowe", ru: "служебные обязанности" },
+  { s: "6. Praca i finanse", pl: "odprawka", ru: "выходное пособие" },
+  { s: "6. Praca i finanse", pl: "odsetki / oprocentowanie", ru: "проценты / ставка" },
+  { s: "6. Praca i finanse", pl: "oferta pracy", ru: "вакансия" },
+  { s: "6. Praca i finanse", pl: "okres próbny", ru: "испытательный срок" },
+  { s: "6. Praca i finanse", pl: "paragon / faktura", ru: "чек / счет-фактура" },
+  { s: "6. Praca i finanse", pl: "pensja / wynagrodzenie", ru: "зарплата / вознаграждение" },
+  { s: "6. Praca i finanse", pl: "płaca brutto / netto", ru: "зарплата брутто / нетто" },
+  { s: "6. Praca i finanse", pl: "podatek dochodowy (PIT)", ru: "подоходный налог" },
+  { s: "6. Praca i finanse", pl: "podwyżka", ru: "прибавка к зарплате" },
+  { s: "6. Praca i finanse", pl: "pracodawca / pracownik", ru: "работодатель / работник" },
+  { s: "6. Praca i finanse", pl: "przelew bankowy", ru: "банковский перевод" },
+  { s: "6. Praca i finanse", pl: "przełożony / podwładny", ru: "начальник / подчиненный" },
+  { s: "6. Praca i finanse", pl: "rozmowa kwalifikacyjna", ru: "собеседование" },
+  { s: "6. Praca i finanse", pl: "stanowisko / posada", ru: "должность" },
+  { s: "6. Praca i finanse", pl: "umowa o dzieło", ru: "договор подряда" },
+  { s: "6. Praca i finanse", pl: "umowa o pracę", ru: "трудовой договор" },
+  { s: "6. Praca i finanse", pl: "umowa zlecenie", ru: "договор поручения" },
+  { s: "6. Praca i finanse", pl: "urlop macierzyński / płatny", ru: "декретный / оплачиваемый отпуск" },
+  { s: "6. Praca i finanse", pl: "wypowiedzenie", ru: "заявление об увольнении" },
+  { s: "6. Praca i finanse", pl: "zasiłek dla bezrobotnych", ru: "пособие по безработице" },
+  { s: "6. Praca i finanse", pl: "zwolnienie lekarskie (L4)", ru: "больничный лист" },
+  { s: "6. Praca i finanse", pl: "zysk / strata", ru: "прибыль / убыток" },
+  { s: "7. Edukacja i szkoła", pl: "badanie naukowe", ru: "научное исследование" },
+  { s: "7. Edukacja i szkoła", pl: "czesne", ru: "плата за обучение" },
+  { s: "7. Edukacja i szkoła", pl: "ćwiczenia / konwersatorium", ru: "практика / семинар" },
+  { s: "7. Edukacja i szkoła", pl: "dziekanat / rektorat", ru: "деканат / ректорат" },
+  { s: "7. Edukacja i szkoła", pl: "matura", ru: "выпускной экзамен в школе" },
+  { s: "7. Edukacja i szkoła", pl: "egzamin poprawkowy", ru: "пересдача" },
+  { s: "7. Edukacja i szkoła", pl: "kierunek studiów", ru: "специальность" },
+  { s: "7. Edukacja i szkoła", pl: "kolokwium", ru: "зачетная работа" },
+  { s: "7. Edukacja i szkoła", pl: "korepetycje", ru: "репетиторство" },
+  { s: "7. Edukacja i szkoła", pl: "legitymacja studencka", ru: "студенческий билет" },
+  { s: "7. Edukacja i szkoła", pl: "oblać egzamin", ru: "провалить экзамен" },
+  { s: "7. Edukacja i szkoła", pl: "obrona pracy dyplomowej", ru: "защита диплома" },
+  { s: "7. Edukacja i szkoła", pl: "ocena / stopień", ru: "отметка / оценка" },
+  { s: "7. Edukacja i szkoła", pl: "podręcznik / zeszyt", ru: "учебник / тетрадь" },
+  { s: "7. Edukacja i szkoła", pl: "promotor", ru: "научный руководитель" },
+  { s: "7. Edukacja i szkoła", pl: "praca licencjacka / magisterska", ru: "дипломная работа" },
+  { s: "7. Edukacja i szkoła", pl: "przedmiot obowiązkowy", ru: "обязательный предмет" },
+  { s: "7. Edukacja i szkoła", pl: "rok akademicki / semestr", ru: "учебный год / семестр" },
+  { s: "7. Edukacja i szkoła", pl: "rozprawka / wypracowanie", ru: "эссе / сочинение" },
+  { s: "7. Edukacja i szkoła", pl: "sesja egzaminacyjna", ru: "сессия" },
+  { s: "7. Edukacja i szkoła", pl: "stypendium naukowe", ru: "стипендия" },
+  { s: "7. Edukacja i szkoła", pl: "świadectwo z wyróżnieniem", ru: "аттестат с отличием" },
+  { s: "7. Edukacja i szkoła", pl: "ściągać / ściąga", ru: "списывать / шпаргалка" },
+  { s: "7. Edukacja i szkoła", pl: "uczelnia / uniwersytet", ru: "вуз / университет" },
+  { s: "7. Edukacja i szkoła", pl: "wagarować / wagary", ru: "прогуливать / прогулы" },
+  { s: "7. Edukacja i szkoła", pl: "wykład / wykładowca", ru: "лекция / лектор" },
+  { s: "7. Edukacja i szkoła", pl: "zaliczenie / zaliczyć", ru: "зачет / сдать зачет" },
+  { s: "7. Edukacja i szkoła", pl: "zdawać / zdać egzamin", ru: "сдавать / сдать экзамен" },
+  { s: "8. Zdrowie i medycyna", pl: "alergia / uczulenie", ru: "аллергия" },
+  { s: "8. Zdrowie i medycyna", pl: "badanie krwi / moczu", ru: "анализ крови / мочи" },
+  { s: "8. Zdrowie i medycyna", pl: "bandaż / opatrunek", ru: "бинт / повязка" },
+  { s: "8. Zdrowie i medycyna", pl: "ból gardła / głowy / brzucha", ru: "боль в горле / голове / животе" },
+  { s: "8. Zdrowie i medycyna", pl: "ciśnienie krwi", ru: "давление крови" },
+  { s: "8. Zdrowie i medycyna", pl: "cukrzyca", ru: "диабет" },
+  { s: "8. Zdrowie i medycyna", pl: "dolegliwość / objaw", ru: "недомогание / симптом" },
+  { s: "8. Zdrowie i medycyna", pl: "gips / złamanie", ru: "гипс / перелом" },
+  { s: "8. Zdrowie i medycyna", pl: "gorączka / dreszcze", ru: "температура / озноб" },
+  { s: "8. Zdrowie i medycyna", pl: "grypa / przeziębienie", ru: "грипп / простуда" },
+  { s: "8. Zdrowie i medycyna", pl: "katar / kaszel", ru: "насморк / кашель" },
+  { s: "8. Zdrowie i medycyna", pl: "karetka pogotowia", ru: "скорая помощь" },
+  { s: "8. Zdrowie i medycyna", pl: "krople / maść / syrop", ru: "капли / мазь / сироп" },
+  { s: "8. Zdrowie i medycyna", pl: "krwawienie / krwotok", ru: "кровотечение" },
+  { s: "8. Zdrowie i medycyna", pl: "lek przeciwbólowy", ru: "обезболивающее" },
+  { s: "8. Zdrowie i medycyna", pl: "mdłości / nudności", ru: "тошнота" },
+  { s: "8. Zdrowie i medycyna", pl: "odporność organizmu", ru: "иммунитет" },
+  { s: "8. Zdrowie i medycyna", pl: "oparzenie", ru: "ожог" },
+  { s: "8. Zdrowie i medycyna", pl: "operacja / zabieg", ru: "операция / процедура" },
+  { s: "8. Zdrowie i medycyna", pl: "oddział ratunkowy (SOR)", ru: "приемный покой" },
+  { s: "8. Zdrowie i medycyna", pl: "pacjent / chory", ru: "пациент / больной" },
+  { s: "8. Zdrowie i medycyna", pl: "przychodnia", ru: "поликлиника" },
+  { s: "8. Zdrowie i medycyna", pl: "recepta na leki", ru: "рецепт" },
+  { s: "8. Zdrowie i medycyna", pl: "rehabilitacja", ru: "реабилитация" },
+  { s: "8. Zdrowie i medycyna", pl: "rentgen (RTG) / USG", ru: "рентген / УЗИ" },
+  { s: "8. Zdrowie i medycyna", pl: "skierowanie do specjalisty", ru: "направление к врачу" },
+  { s: "8. Zdrowie i medycyna", pl: "stracić przytomność / zemdleć", ru: "упасть в обморок" },
+  { s: "8. Zdrowie i medycyna", pl: "szczepienie / szczepionka", ru: "прививка / вакцина" },
+  { s: "8. Zdrowie i medycyna", pl: "szwy / założyć szwy", ru: "швы / наложить швы" },
+  { s: "8. Zdrowie i medycyna", pl: "tabletka / pigułka", ru: "таблетка" },
+  { s: "8. Zdrowie i medycyna", pl: "udar mózgu / zawał serca", ru: "инсульт / инфаркт" },
+  { s: "8. Zdrowie i medycyna", pl: "ukąszenie / użądlenie", ru: "укус" },
+  { s: "8. Zdrowie i medycyna", pl: "wypadek", ru: "происшествие, авария" },
+  { s: "8. Zdrowie i medycyna", pl: "zakażenie / infekcja", ru: "инфекция" },
+  { s: "8. Zdrowie i medycyna", pl: "zarazić się", ru: "заразиться" },
+  { s: "8. Zdrowie i medycyna", pl: "zapalenie płuc", ru: "воспаление легких" },
+  { s: "8. Zdrowie i medycyna", pl: "zatrucie pokarmowe", ru: "пищевое отравление" },
+  { s: "8. Zdrowie i medycyna", pl: "zastrzyk", ru: "укол" },
+  { s: "8. Zdrowie i medycyna", pl: "zwichnięcie / skręcenie", ru: "вывих / растяжение" },
+  { s: "9. Zakupy i gastronomia", pl: "apetyt", ru: "аппетит" },
+  { s: "9. Zakupy i gastronomia", pl: "barszcz / żurek / rosół", ru: "борщ / жур / бульон" },
+  { s: "9. Zakupy i gastronomia", pl: "cena promocyjna / obniżka", ru: "скидка" },
+  { s: "9. Zakupy i gastronomia", pl: "cenówka / metka", ru: "ценник / бирка" },
+  { s: "9. Zakupy i gastronomia", pl: "danie główne / przystawka", ru: "основное блюдо / закуска" },
+  { s: "9. Zakupy i gastronomia", pl: "deser / szarlotka", ru: "десерт / яблочный пирог" },
+  { s: "9. Zakupy i gastronomia", pl: "dostawa do domu", ru: "доставка на дом" },
+  { s: "9. Zakupy i gastronomia", pl: "drób / wołowina / wieprzowina", ru: "птица / говядина / свинина" },
+  { s: "9. Zakupy i gastronomia", pl: "galeria handlowa", ru: "торговый центр" },
+  { s: "9. Zakupy i gastronomia", pl: "gwarancja / reklamacja", ru: "гарантия / рекламация" },
+  { s: "9. Zakupy i gastronomia", pl: "jadłospis / menu", ru: "меню" },
+  { s: "9. Zakupy i gastronomia", pl: "kasa samoobsługowa", ru: "касса самообслуживания" },
+  { s: "9. Zakupy i gastronomia", pl: "kelner / napiwek", ru: "официант / чаевые" },
+  { s: "9. Zakupy i gastronomia", pl: "kolejka / stać w kolejce", ru: "очередь / стоять в очереди" },
+  { s: "9. Zakupy i gastronomia", pl: "nabiał / wędlina", ru: "молочные продукты / колбасы" },
+  { s: "9. Zakupy i gastronomia", pl: "naleśniki / pierogi", ru: "блины / вареники" },
+  { s: "9. Zakupy i gastronomia", pl: "obsługa klienta", ru: "сервис клиентов" },
+  { s: "9. Zakupy i gastronomia", pl: "oliwa / olej / przyprawy", ru: "масло / приправы" },
+  { s: "9. Zakupy i gastronomia", pl: "pieczywo (chleb, bułki)", ru: "выпечка" },
+  { s: "9. Zakupy i gastronomia", pl: "płatność zbliżeniowa", ru: "бесконтактная оплата" },
+  { s: "9. Zakupy i gastronomia", pl: "przepis kulinarny", ru: "рецепт" },
+  { s: "9. Zakupy i gastronomia", pl: "przymierzalnia / przymierzać", ru: "примерочная / примерять" },
+  { s: "9. Zakupy i gastronomia", pl: "rachunek", ru: "счет" },
+  { s: "9. Zakupy i gastronomia", pl: "rezerwacja stolika", ru: "бронь столика" },
+  { s: "9. Zakupy i gastronomia", pl: "rozmiar / fason", ru: "размер / фасон" },
+  { s: "9. Zakupy i gastronomia", pl: "składniki", ru: "ингредиенты" },
+  { s: "9. Zakupy i gastronomia", pl: "surowy / ugotowany", ru: "сырой / вареный" },
+  { s: "9. Zakupy i gastronomia", pl: "świeży / zepsuty", ru: "свежий / испорченный" },
+  { s: "9. Zakupy i gastronomia", pl: "towar / artykuł", ru: "товар" },
+  { s: "9. Zakupy i gastronomia", pl: "wózek / koszyk", ru: "тележка / корзина" },
+  { s: "9. Zakupy i gastronomia", pl: "wymiana towaru", ru: "обмен товара" },
+  { s: "9. Zakupy i gastronomia", pl: "wyprzedaż sezonowa", ru: "распродажа" },
+  { s: "9. Zakupy i gastronomia", pl: "zamówienie / zamawiać", ru: "заказ / заказывать" },
+  { s: "9. Zakupy i gastronomia", pl: "zwrot pieniędzy", ru: "возврат денег" },
+  { s: "10. Podróże i transport", pl: "autostrada / droga", ru: "автомагистраль / дорога" },
+  { s: "10. Podróże i transport", pl: "awaria / usterka", ru: "поломка" },
+  { s: "10. Podróże i transport", pl: "bagaż podręczny / rejestrowany", ru: "ручная кладь / багаж" },
+  { s: "10. Podróże i transport", pl: "bilet ulgowy / normalny", ru: "льготный / полный билет" },
+  { s: "10. Podróże i transport", pl: "biuro podróży", ru: "турагентство" },
+  { s: "10. Podróże i transport", pl: "cel podróży", ru: "пункт назначения" },
+  { s: "10. Podróże i transport", pl: "dworzec kolejowy / autobusowy", ru: "вокзал" },
+  { s: "10. Podróże i transport", pl: "karta pokładowa", ru: "посадочный талон" },
+  { s: "10. Podróże i transport", pl: "kierowca / pasażer", ru: "водитель / пассажир" },
+  { s: "10. Podróże i transport", pl: "klimatyzacja", ru: "кондиционер" },
+  { s: "10. Podróże i transport", pl: "kontrola celna / graniczna", ru: "таможня / погранконтроль" },
+  { s: "10. Podróże i transport", pl: "korki drogowe", ru: "пробки" },
+  { s: "10. Podróże i transport", pl: "kursować", ru: "курсировать" },
+  { s: "10. Podróże i transport", pl: "mandat", ru: "штраф" },
+  { s: "10. Podróże i transport", pl: "odlot / przylot", ru: "вылет / прилет" },
+  { s: "10. Podróże i transport", pl: "odprawa (check-in)", ru: "регистрация" },
+  { s: "10. Podróże i transport", pl: "odjazd / przyjazd", ru: "отправление / прибытие" },
+  { s: "10. Podróże i transport", pl: "opóźnienie", ru: "задержка, опоздание" },
+  { s: "10. Podróże i transport", pl: "pasażer na gapę", ru: "безбилетник" },
+  { s: "10. Podróże i transport", pl: "paszport / dowód osobisty", ru: "паспорт / ID-карта" },
+  { s: "10. Podróże i transport", pl: "peron / tor", ru: "перрон / путь" },
+  { s: "10. Podróże i transport", pl: "pociąg pospieszny / ekspres", ru: "скорый поезд" },
+  { s: "10. Podróże i transport", pl: "połączenie z przesiadką", ru: "рейс с пересадкой" },
+  { s: "10. Podróże i transport", pl: "postój taksówek", ru: "стоянка такси" },
+  { s: "10. Podróże i transport", pl: "przebita opona", ru: "проколотая шина" },
+  { s: "10. Podróże i transport", pl: "przechowalnia bagażu", ru: "камера хранения" },
+  { s: "10. Podróże i transport", pl: "przejście dla pieszych", ru: "пешеходный переход" },
+  { s: "10. Podróże i transport", pl: "przesiąść się", ru: "пересесть" },
+  { s: "10. Podróże i transport", pl: "przystanek na żądanie", ru: "остановка по требованию" },
+  { s: "10. Podróże i transport", pl: "przewodnik turystyczny", ru: "гид" },
+  { s: "10. Podróże i transport", pl: "rozkład jazdy", ru: "расписание" },
+  { s: "10. Podróże i transport", pl: "ruch drogowy", ru: "движение" },
+  { s: "10. Podróże i transport", pl: "rzeczy zagubione", ru: "бюро находок" },
+  { s: "10. Podróże i transport", pl: "schronisko górskie", ru: "приют в горах" },
+  { s: "10. Podróże i transport", pl: "stacja benzynowa / paliwo", ru: "заправка / топливо" },
+  { s: "10. Podróże i transport", pl: "sygnalizacja świetlna", ru: "светофор" },
+  { s: "10. Podróże i transport", pl: "ubezpieczenie turystyczne", ru: "страховка" },
+  { s: "10. Podróże i transport", pl: "wypożyczalnia aut", ru: "аренда авто" },
+  { s: "10. Podróże i transport", pl: "zakwaterowanie / nocleg", ru: "проживание / ночлег" },
+  { s: "10. Podróże i transport", pl: "zwiedzać", ru: "осматривать достопримечательности" },
+  { s: "11. Czas wolny i kultura", pl: "arcydzieło", ru: "шедевр" },
+  { s: "11. Czas wolny i kultura", pl: "boisko / stadion", ru: "площадка / стадион" },
+  { s: "11. Czas wolny i kultura", pl: "czynny wypoczynek", ru: "активный отдых" },
+  { s: "11. Czas wolny i kultura", pl: "dyscyplina sportowa", ru: "вид спорта" },
+  { s: "11. Czas wolny i kultura", pl: "dzieło sztuki", ru: "произведение искусства" },
+  { s: "11. Czas wolny i kultura", pl: "ekranizacja", ru: "экранизация" },
+  { s: "11. Czas wolny i kultura", pl: "gra planszowa", ru: "настольная игра" },
+  { s: "11. Czas wolny i kultura", pl: "hobby / pasja", ru: "хобби / увлечение" },
+  { s: "11. Czas wolny i kultura", pl: "karnet na siłownię", ru: "абонемент в зал" },
+  { s: "11. Czas wolny i kultura", pl: "kibic / kibicować", ru: "болельщик / болеть" },
+  { s: "11. Czas wolny i kultura", pl: "kryty basen", ru: "бассейн" },
+  { s: "11. Czas wolny i kultura", pl: "malarz / rzeźbiarz / pisarz", ru: "художник / скульптор / писатель" },
+  { s: "11. Czas wolny i kultura", pl: "mecz / rozgrywki", ru: "матч / турнир" },
+  { s: "11. Czas wolny i kultura", pl: "napisy / dubbing", ru: "субтитры / дубляж" },
+  { s: "11. Czas wolny i kultura", pl: "oklaski / brawa", ru: "аплодисменты" },
+  { s: "11. Czas wolny i kultura", pl: "rekord życiowy", ru: "личный рекорд" },
+  { s: "11. Czas wolny i kultura", pl: "remis", ru: "ничья" },
+  { s: "11. Czas wolny i kultura", pl: "repertuar", ru: "репертуар" },
+  { s: "11. Czas wolny i kultura", pl: "reżyser / scenarzysta", ru: "режиссер / сценарист" },
+  { s: "11. Czas wolny i kultura", pl: "rola główna / drugoplanowa", ru: "главная / второстепенная роль" },
+  { s: "11. Czas wolny i kultura", pl: "rozrywka", ru: "развлечение" },
+  { s: "11. Czas wolny i kultura", pl: "scena / widownia", ru: "сцена / зал" },
+  { s: "11. Czas wolny i kultura", pl: "spektakl / przedstawienie", ru: "спектакль" },
+  { s: "11. Czas wolny i kultura", pl: "szachy / warcaby", ru: "шахматы / шашки" },
+  { s: "11. Czas wolny i kultura", pl: "sztuka współczesna", ru: "современное искусство" },
+  { s: "11. Czas wolny i kultura", pl: "trener / sędzia", ru: "тренер / судья" },
+  { s: "11. Czas wolny i kultura", pl: "widz / słuchacz", ru: "зритель / слушатель" },
+  { s: "11. Czas wolny i kultura", pl: "wstęp wolny / płatny", ru: "вход свободный / платный" },
+  { s: "11. Czas wolny i kultura", pl: "wystawa / galeria", ru: "выставка / галерея" },
+  { s: "11. Czas wolny i kultura", pl: "zwycięzca / przegrany", ru: "победитель / проигравший" },
+  { s: "12. Pogoda i przyroda", pl: "bezchmurnie / pogodnie", ru: "безоблачно / ясно" },
+  { s: "12. Pogoda i przyroda", pl: "brzeg morza / rzeki", ru: "берег моря / реки" },
+  { s: "12. Pogoda i przyroda", pl: "burza z piorunami", ru: "гроза" },
+  { s: "12. Pogoda i przyroda", pl: "ciśnienie atmosferyczne", ru: "давление" },
+  { s: "12. Pogoda i przyroda", pl: "deszcz ze śniegiem", ru: "мокрый снег" },
+  { s: "12. Pogoda i przyroda", pl: "dolina / wąwóz", ru: "долина / ущелье" },
+  { s: "12. Pogoda i przyroda", pl: "drzewo liściaste / iglaste", ru: "лиственное / хвойное дерево" },
+  { s: "12. Pogoda i przyroda", pl: "gołoledź", ru: "гололед" },
+  { s: "12. Pogoda i przyroda", pl: "grad", ru: "град" },
+  { s: "12. Pogoda i przyroda", pl: "grzmot / błyskawica", ru: "гром / молния" },
+  { s: "12. Pogoda i przyroda", pl: "jezioro / staw", ru: "озеро / пруд" },
+  { s: "12. Pogoda i приroda", pl: "klęska żywiołowa", ru: "стихийное бедствие" },
+  { s: "12. Pogoda i przyroda", pl: "mgła / zamglenie", ru: "туман / дымка" },
+  { s: "12. Pogoda i przyroda", pl: "mróz / przymrozek", ru: "мороз / заморозки" },
+  { s: "12. Pogoda i przyroda", pl: "odwilż", ru: "оттепель" },
+  { s: "12. Pogoda i przyroda", pl: "opady atmosferyczne", ru: "осадки" },
+  { s: "12. Pogoda i przyroda", pl: "porywisty wiatr", ru: "сильный ветер" },
+  { s: "12. Pogoda i przyroda", pl: "powódź", ru: "наводнение" },
+  { s: "12. Pogoda i przyroda", pl: "pożar lasu", ru: "лесной пожар" },
+  { s: "12. Pogoda i przyroda", pl: "półwysep / wyspa", ru: "полуостров / остров" },
+  { s: "12. Pogoda i przyroda", pl: "prognoza pogody", ru: "прогноз погоды" },
+  { s: "12. Pogoda i przyroda", pl: "puszcza / las pierwotny", ru: "пуща" },
+  { s: "12. Pogoda i przyroda", pl: "równina / wyżyna", ru: "равнина / возвышенность" },
+  { s: "12. Pogoda i przyroda", pl: "susza", ru: "засуха" },
+  { s: "12. Pogoda i przyroda", pl: "szczyt górski / pasmo", ru: "вершина / хребет" },
+  { s: "12. Pogoda i przyroda", pl: "temperatura ujemna / dodatnia", ru: "минус / плюс" },
+  { s: "12. Pogoda i приroda", pl: "trzęsienie ziemi", ru: "землетрясение" },
+  { s: "12. Pogoda i przyroda", pl: "ulewa / deszcz", ru: "ливень / дождь" },
+  { s: "12. Pogoda i przyroda", pl: "upał / skwar", ru: "жара / зной" },
+  { s: "12. Pogoda i przyroda", pl: "wichura / huragan", ru: "ураган" },
+  { s: "12. Pogoda i przyroda", pl: "wilgotność powietrza", ru: "влажность" },
+  { s: "12. Pogoda i приroda", pl: "zachmurzenie", ru: "облачность" },
+  { s: "13. Prawo i społeczeństwo", pl: "afera / skandal", ru: "скандал" },
+  { s: "13. Prawo i społeczeństwo", pl: "aresztować / zatrzymać", ru: "арестовать / задержать" },
+  { s: "13. Prawo i społeczeństwo", pl: "artykuł prasowy", ru: "статья" },
+  { s: "13. Prawo i społeczeństwo", pl: "bezpieczeństwo publiczne", ru: "безопасность" },
+  { s: "13. Prawo i społeczeństwo", pl: "dowód rzeczowy", ru: "вещественное доказательство" },
+  { s: "13. Prawo i społeczeństwo", pl: "dziennikarz / reporter", ru: "журналист" },
+  { s: "13. Prawo i społeczeństwo", pl: "głosować / oddać głos", ru: "голосовать" },
+  { s: "13. Prawo i społeczeństwo", pl: "kampania wyborcza", ru: "избирательная кампания" },
+  { s: "13. Prawo i społeczeństwo", pl: "kara grzywny", ru: "штраф" },
+  { s: "13. Prawo i społeczeństwo", pl: "kara pozbawienia wolności", ru: "тюремное заключение" },
+  { s: "13. Prawo i społeczeństwo", pl: "kradzież z włamaniem", ru: "кража со взломом" },
+  { s: "13. Prawo i społeczeństwo", pl: "nagłówek", ru: "заголовок" },
+  { s: "13. Prawo i społeczeństwo", pl: "naruszenie prawa", ru: "нарушение закона" },
+  { s: "13. Prawo i społeczeństwo", pl: "obywatel / obywatelstwo", ru: "гражданин / гражданство" },
+  { s: "13. Prawo i społeczeństwo", pl: "ofiara / poszkodowany", ru: "жертва / потерпевший" },
+  { s: "13. Prawo i społeczeństwo", pl: "organizacja pozarządowa (NGO)", ru: "общественная организация" },
+  { s: "13. Prawo i społeczeństwo", pl: "oszustwo / wyłudzenie", ru: "мошенничество" },
+  { s: "13. Prawo i społeczeństwo", pl: "parlament / sejm / senat", ru: "парламент / сейм / сенат" },
+  { s: "13. Prawo i społeczeństwo", pl: "podejrzany / oskarżony", ru: "подозреваемый / обвиняемый" },
+  { s: "13. Prawo i społeczeństwo", pl: "podatek", ru: "налог" },
+  { s: "13. Prawo i społeczeństwo", pl: "polityka zagraniczna", ru: "внешняя политика" },
+  { s: "13. Prawo i społeczeństwo", pl: "prawnik / adwokat / sędzia", ru: "юрист / адвокат / судья" },
+  { s: "13. Prawo i społeczeństwo", pl: "praworządność", ru: "законность" },
+  { s: "13. Prawo i społeczeństwo", pl: "przestępstwo / wykroczenie", ru: "преступление / правонарушение" },
+  { s: "13. Prawo i społeczeństwo", pl: "rząd / premier / prezydent", ru: "правительство / премьер / президент" },
+  { s: "13. Prawo i społeczeństwo", pl: "rozprawa sądowa / proces", ru: "заседание суда / процесс" },
+  { s: "13. Prawo i społeczeństwo", pl: "społeczeństwo obywatelskie", ru: "гражданское общество" },
+  { s: "13. Prawo i społeczeństwo", pl: "sprawca", ru: "правонарушитель" },
+  { s: "13. Prawo i społeczeństwo", pl: "świadek zdarzenia", ru: "свидетель" },
+  { s: "13. Prawo i społeczeństwo", pl: "uchwalić ustawę", ru: "принять закон" },
+  { s: "13. Prawo i społeczeństwo", pl: "urząd stanu cywilnego", ru: "загс" },
+  { s: "13. Prawo i społeczeństwo", pl: "wolność słowa", ru: "свобода слова" },
+  { s: "13. Prawo i społeczeństwo", pl: "wybory parlamentarne / prezydenckie", ru: "выборы" },
+  { s: "13. Prawo i społeczeństwo", pl: "wyrok sądu", ru: "приговор суда" },
+  { s: "13. Prawo i społeczeństwo", pl: "zeznanie świadka", ru: "показания" },
+  { s: "14. Technologia i media", pl: "aktualizacja", ru: "обновление" },
+  { s: "14. Technologia i media", pl: "aplikacja mobilna", ru: "мобильное приложение" },
+  { s: "14. Technologia i media", pl: "awaria systemu", ru: "сбой системы" },
+  { s: "14. Technologia i media", pl: "baza danych", ru: "база данных" },
+  { s: "14. Technologia i media", pl: "hasło dostępu", ru: "пароль" },
+  { s: "14. Technologia i media", pl: "kabel / ładowarka", ru: "кабель / зарядка" },
+  { s: "14. Technologia i media", pl: "kasować / usuwać plik", ru: "удалять файл" },
+  { s: "14. Technologia i media", pl: "klawiatura / mysz", ru: "клавиатура / мышь" },
+  { s: "14. Technologia i media", pl: "komunikat błędu", ru: "ошибка" },
+  { s: "14. Technologia i media", pl: "konto użytkownika", ru: "аккаунт" },
+  { s: "14. Technologia i media", pl: "łącze internetowe", ru: "интернет-соединение" },
+  { s: "14. Technologia i media", pl: "ładować / rozładować", ru: "заряжать / разряжать" },
+  { s: "14. Technologia i media", pl: "oprogramowanie antywirusowe", ru: "антивирус" },
+  { s: "14. Technologia i media", pl: "pamięć podręczna / pendrive", ru: "кэш / флешка" },
+  { s: "14. Technologia i media", pl: "pobrać / ściągnąć plik", ru: "скачать файл" },
+  { s: "14. Technologia i media", pl: "portal społecznościowy", ru: "соцсеть" },
+  { s: "14. Technologia i media", pl: "powiadomienie", ru: "уведомление" },
+  { s: "14. Technologia i media", pl: "przeglądarka internetowa", ru: "браузер" },
+  { s: "14. Technologia i media", pl: "przesłać dalej / udostępnić", ru: "переслать / поделиться" },
+  { s: "14. Technologia i media", pl: "sformatować dysk", ru: "форматировать диск" },
+  { s: "14. Technologia i media", pl: "sieć Wi-Fi", ru: "сеть Wi-Fi" },
+  { s: "14. Technologia i media", pl: "strona główna", ru: "главная страница" },
+  { s: "14. Technologia i media", pl: "sztuczna inteligencja", ru: "искусственный интеллект" },
+  { s: "14. Technologia i media", pl: "ustawienia prywatności", ru: "настройки приватности" },
+  { s: "14. Technologia i media", pl: "wkleić / skopiować", ru: "вставить / скопировать" },
+  { s: "14. Technologia i media", pl: "wyszukiwarka", ru: "поисковая система" },
+  { s: "14. Technologia i media", pl: "załącznik", ru: "вложение к письму" },
+  { s: "14. Technologia i media", pl: "zainstalować / odinstalować", ru: "установить / удалить" },
+  { s: "14. Technologia i media", pl: "zalogować się / wylogować", ru: "войти / выйти" },
+  { s: "14. Technologia i media", pl: "zapisać zmiany", ru: "сохранить изменения" },
+  { s: "14. Technologia i media", pl: "zasięg sieci", ru: "сигнал сети" },
+  { s: "14. Technologia i media", pl: "zresetować urządzenie", ru: "перезагрузить устройство" },
+  { s: "15. Pary aspektowe czasowników", pl: "brać / wziąć", ru: "брать / взять" },
+  { s: "15. Pary aspektowe czasowników", pl: "bronić / obronić", ru: "защищать / защитить" },
+  { s: "15. Pary aspektowe czasowników", pl: "chudnąć / schudnąć", ru: "худеть / похудеть" },
+  { s: "15. Pary aspektowe czasowników", pl: "decydować się / zdecydować się", ru: "решаться / решиться" },
+  { s: "15. Pary aspektowe czasowników", pl: "doceniać / docenić", ru: "ценить / оценить" },
+  { s: "15. Pary aspektowe czasowników", pl: "doradzać / doradzić", ru: "советовать / посоветовать" },
+  { s: "15. Pary aspektowe czasowników", pl: "dostarczać / dostarczyć", ru: "доставлять / доставить" },
+  { s: "15. Pary aspektowe czasowników", pl: "dostawać / dostać", ru: "получать / получить" },
+  { s: "15. Pary aspektowe czasowników", pl: "dowiadywać się / dowiedzieć się", ru: "узнавать / узнать" },
+  { s: "15. Pary aspektowe czasowników", pl: "kupować / kupić", ru: "покупать / купить" },
+  { s: "15. Pary aspektowe czasowników", pl: "naprawiać / naprawić", ru: "ремонтировать / починить" },
+  { s: "15. Pary aspektowe czasowników", pl: "obiecywać / obiecać", ru: "обещать / пообещать" },
+  { s: "15. Pary aspektowe czasowników", pl: "odbierać / odebrać", ru: "забирать / забрать" },
+  { s: "15. Pary aspektowe czasowników", pl: "odmawiać / odmówić", ru: "отказывать / отказать" },
+  { s: "15. Pary aspektowe czasowników", pl: "odpowiadać / odpowiedzieć", ru: "отвечать / ответить" },
+  { s: "15. Pary aspektowe czasowników", pl: "organizować / zorganizować", ru: "организовывать / организовать" },
+  { s: "15. Pary aspektowe czasowników", pl: "osiągać / osiągnąć", ru: "достигать / достичь" },
+  { s: "15. Pary aspektowe czasowników", pl: "ostrzegać / ostrzec", ru: "предупреждать / предупредить" },
+  { s: "15. Pary aspektowe czasowników", pl: "oszukiwać / oszukać", ru: "обманывать / обмануть" },
+  { s: "15. Pary aspektowe czasowników", pl: "otwierać / otworzyć", ru: "открывать / открыть" },
+  { s: "15. Pary aspektowe czasowników", pl: "piec / upiec", ru: "печь / испечь" },
+  { s: "15. Pary aspektowe czasowników", pl: "płacić / zapłacić", ru: "платить / заплатить" },
+  { s: "15. Pary aspektowe czasowników", pl: "poddawać się / poddać się", ru: "сдаваться / сдаться" },
+  { s: "15. Pary aspektowe czasowników", pl: "podejmować / podjąć", ru: "предпринимать / принять (решение)" },
+  { s: "15. Pary aspektowe czasowników", pl: "podpisywać / podpisać", ru: "подписывать / подписать" },
+  { s: "15. Pary aspektowe czasowników", pl: "pokazywać / pokazać", ru: "показывать / показать" },
+  { s: "15. Pary aspektowe czasowników", pl: "pomagać / pomóc", ru: "помогать / помочь" },
+  { s: "15. Pary aspektowe czasowników", pl: "poprawiać / poprawić", ru: "исправлять / исправить" },
+  { s: "15. Pary aspektowe czasowników", pl: "porównywać / porównać", ru: "сравнивать / сравнить" },
+  { s: "15. Pary aspektowe czasowników", pl: "pozwalać / pozwolić", ru: "позволять / позволить" },
+  { s: "15. Pary aspektowe czasowników", pl: "proponować / zaproponować", ru: "предлагать / предложить" },
+  { s: "15. Pary aspektowe czasowników", pl: "przekonywać / przekonać", ru: "убеждать / убедить" },
+  { s: "15. Pary aspektowe czasowników", pl: "przepraszać / przeprosić", ru: "извиняться / извиниться" },
+  { s: "15. Pary aspektowe czasowników", pl: "przestawać / przestać", ru: "переставать / перестать" },
+  { s: "15. Pary aspektowe czasowników", pl: "przygotowywać / przygotować", ru: "готовить / приготовить" },
+  { s: "15. Pary aspektowe czasowników", pl: "rezygnować / zrezygnować", ru: "отказываться / отказаться" },
+  { s: "15. Pary aspektowe czasowników", pl: "rozwiązywać / rozwiązać", ru: "решать / решить" },
+  { s: "15. Pary aspektowe czasowników", pl: "rozwijać / rozwinąć", ru: "развивать / развить" },
+  { s: "15. Pary aspektowe czasowników", pl: "sprawdzać / sprawdzić", ru: "проверять / проверить" },
+  { s: "15. Pary aspektowe czasowników", pl: "tłumaczyć / wytłumaczyć", ru: "объяснять / объяснить" },
+  { s: "15. Pary aspektowe czasowników", pl: "tracić / stracić", ru: "терять / потерять" },
+  { s: "15. Pary aspektowe czasowników", pl: "tyć / przytyć", ru: "поправляться / поправиться" },
+  { s: "15. Pary aspektowe czasowników", pl: "udzielać / udzielić", ru: "давать (совет) / предоставить" },
+  { s: "15. Pary aspektowe czasowników", pl: "ukrywać / ukryć", ru: "прятать / спрятать" },
+  { s: "15. Pary aspektowe czasowników", pl: "ulegać / ulec", ru: "подвергаться / подвергнуться" },
+  { s: "15. Pary aspektowe czasowników", pl: "upadać / upaść", ru: "падать / упасть" },
+  { s: "15. Pary aspektowe czasowników", pl: "uprzedzać / uprzedzić", ru: "предупреждать / предупредить" },
+  { s: "15. Pary aspektowe czasowników", pl: "używać / użyć", ru: "использовать / применить" },
+  { s: "15. Pary aspektowe czasowników", pl: "widzieć / zobaczyć", ru: "видеть / увидеть" },
+  { s: "15. Pary aspektowe czasowników", pl: "włączać / włączyć", ru: "включать / включить" },
+  { s: "15. Pary aspektowe czasowników", pl: "wyłączać / wyłączyć", ru: "выключать / выключить" },
+  { s: "15. Pary aspektowe czasowników", pl: "wyjaśniać / wyjaśnić", ru: "разъяснять / разъяснить" },
+  { s: "15. Pary aspektowe czasowników", pl: "wyprowadzać się / wyprowadzić się", ru: "съезжать / выехать" },
+  { s: "15. Pary aspektowe czasowników", pl: "wyrażać / wyrazić", ru: "выражать / выразить" },
+  { s: "15. Pary aspektowe czasowników", pl: "wystarczać / wystarczyć", ru: "хватать / хватить" },
+  { s: "15. Pary aspektowe czasowników", pl: "zachwycać się / zachwycić się", ru: "восхищаться / восхититься" },
+  { s: "15. Pary aspektowe czasowników", pl: "zamawiać / zamówić", ru: "заказывать / заказать" },
+  { s: "15. Pary aspektowe czasowników", pl: "zauważać / zauważyć", ru: "замечать / заметить" },
+  { s: "15. Pary aspektowe czasowników", pl: "zmieniać / zmienić", ru: "менять / изменить" },
+  { s: "15. Pary aspektowe czasowników", pl: "znikać / zniknąć", ru: "исчезать / исчезнуть" },
+  { s: "15. Pary aspektowe czasowników", pl: "zwracać / zwrócić uwagę", ru: "обращать / обратить внимание" },
+  { s: "16. Przymiotniki i przysłówki", pl: "aktualny / przestarzały", ru: "актуальный / устаревший" },
+  { s: "16. Przymiotniki i przysłówki", pl: "bezpośredni / pośredni", ru: "прямой / косвенный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "bieżący", ru: "текущий" },
+  { s: "16. Przymiotniki i przysłówki", pl: "całkowity / częściowy", ru: "полный / частичный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "cenny / bezwartościowy", ru: "ценный / никчемный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "częsty / rzadki", ru: "частый / редкий" },
+  { s: "16. Przymiotniki i przysłówki", pl: "gwałtowny / powolny", ru: "резкий / медленный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "istotny / błahy", ru: "существенный / пустяковый" },
+  { s: "16. Przymiotniki i przysłówki", pl: "jednolity / różnorodny", ru: "однородный / разнообразный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "korzystny / niekorzystny", ru: "выгодный / невыгодный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "konieczny / zbędny", ru: "необходимый / лишний" },
+  { s: "16. Przymiotniki i przysłówki", pl: "obcy / swojski", ru: "чужой / свой" },
+  { s: "16. Przymiotniki i przysłówki", pl: "obecny / nieobecny", ru: "присутствующий / отсутствующий" },
+  { s: "16. Przymiotniki i przysłówki", pl: "ogromny / znikomy", ru: "огромный / ничтожный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "okropny / wspaniały", ru: "ужасный / прекрасный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "osobny / wspólny", ru: "отдельный / общий" },
+  { s: "16. Przymiotniki i przysłówki", pl: "ostrożny / ryzykowny", ru: "осторожный / рискованный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "pewny / wątpliwy", ru: "уверенный / сомнительный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "podobny / odmienny", ru: "похожий / другой" },
+  { s: "16. Przymiotniki i przysłówki", pl: "poważny / żartobliwy", ru: "серьезный / шуточный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "prawdopodobny / niemożliwy", ru: "вероятный / невозможный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "przekonujący", ru: "убедительный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "przypadkowy / celowy", ru: "случайный / намеренный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "rzeczywisty / pozorny", ru: "реальный / мнимый" },
+  { s: "16. Przymiotniki i przysłówki", pl: "skomplikowany / prosty", ru: "сложный / простой" },
+  { s: "16. Przymiotniki i przysłówki", pl: "skuteczny / bezskuteczny", ru: "эффективный / безрезультатный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "stały / zmienny", ru: "постоянный / переменчивый" },
+  { s: "16. Przymiotniki i przysłówki", pl: "stosowny / niestosowny", ru: "уместный / неуместный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "szkodliwy / pożyteczny", ru: "вредный / полезный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "świadomy / nieświadomy", ru: "сознательный / бессознательный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "trwały / nietrwały", ru: "прочный / недолговечный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "udany / nieudany", ru: "удачный / неудачный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "uważny / roztargniony", ru: "внимательный / рассеянный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "widoczny / niewidoczny", ru: "видимый / невидимый" },
+  { s: "16. Przymiotniki i przysłówki", pl: "właściwy / niewłaściwy", ru: "правильный / неправильный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "wyjątkowy / przeciętny", ru: "исключительный / средний" },
+  { s: "16. Przymiotniki i przysłówki", pl: "wystarczający", ru: "достаточный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "względny / bezwzględny", ru: "относительный / абсолютный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "znaczny / nieznaczny", ru: "значительный / незначительный" },
+  { s: "16. Przymiotniki i przysłówki", pl: "złożony", ru: "сложный, составной" },
+  { s: "17. Spójniki i partykuły", pl: "aczkolwiek", ru: "хотя, впрочем" },
+  { s: "17. Spójniki i partykuły", pl: "albo... albo...", ru: "или... или..." },
+  { s: "17. Spójniki i partykuły", pl: "ani... ani...", ru: "ни... ни..." },
+  { s: "17. Spójniki i partykuły", pl: "bowiem / gdyż / ponieważ", ru: "так как, потому что" },
+  { s: "17. Spójniki i partykuły", pl: "chociaż / mimo że", ru: "хотя, несмотря на то что" },
+  { s: "17. Spójniki i partykuły", pl: "dlatego że / z powodu", ru: "потому что / по причине" },
+  { s: "17. Spójniki i partykuły", pl: "dopóki / dopóki nie", ru: "пока / пока не" },
+  { s: "17. Spójniki i partykuły", pl: "iż / że", ru: "что" },
+  { s: "17. Spójniki i partykuły", pl: "jakby / jak gdyby", ru: "как будто" },
+  { s: "17. Spójniki i partykuły", pl: "jednak / jednakże", ru: "однако, все же" },
+  { s: "17. Spójniki i partykuły", pl: "mianowicie", ru: "а именно" },
+  { s: "17. Spójniki i partykuły", pl: "natomiast", ru: "зато, в свою очередь" },
+  { s: "17. Spójniki i partykuły", pl: "nie tylko..., ale również...", ru: "не только..., но и..." },
+  { s: "17. Spójniki i partykuły", pl: "oprócz tego / ponadto", ru: "кроме того, более того" },
+  { s: "17. Spójniki i partykuły", pl: "podczas gdy", ru: "в то время как" },
+  { s: "17. Spójniki i partykuły", pl: "póki co", ru: "пока что" },
+  { s: "17. Spójniki i partykuły", pl: "skoro", ru: "раз уж, если" },
+  { s: "17. Spójniki i partykuły", pl: "toteż / dlatego", ru: "поэтому" },
+  { s: "17. Spójniki i partykuły", pl: "w dodatku", ru: "вдобавок" },
+  { s: "17. Spójniki i partykuły", pl: "w przeciwieństwie do", ru: "в отличие от" },
+  { s: "17. Spójniki i partykuły", pl: "zamiast", ru: "вместо" },
+  { s: "17. Spójniki i partykuły", pl: "zarówno... jak i...", ru: "как..., так и..." },
+  { s: "17. Spójniki i partykuły", pl: "zwłaszcza / szczególnie", ru: "особенно" },
+  { s: "17. Opinia i argumentacja", pl: "Moim zdaniem / Według mnie", ru: "По моему мнению" },
+  { s: "17. Opinia i argumentacja", pl: "Z mojego punktu widzenia", ru: "С моей точки зрения" },
+  { s: "17. Opinia i argumentacja", pl: "Uważam, że... / Jestem zdania...", ru: "Я считаю, что..." },
+  { s: "17. Opinia i argumentacja", pl: "Wydaje mi się, że...", ru: "Мне кажется, что..." },
+  { s: "17. Opinia i argumentacja", pl: "Jestem przekonany(-a), że...", ru: "Я убежден(а), что..." },
+  { s: "17. Opinia i argumentacja", pl: "Z jednej strony..., z drugiej...", ru: "С одной / другой стороны..." },
+  { s: "17. Opinia i argumentacja", pl: "Przede wszystkim należy...", ru: "Прежде всего следует..." },
+  { s: "17. Opinia i argumentacja", pl: "Warto zauważyć, że...", ru: "Стоит заметить, что..." },
+  { s: "17. Opinia i argumentacja", pl: "Podsumowując / Reasumując...", ru: "Подводя итог..." },
+  { s: "17. Opinia i argumentacja", pl: "Na zakończenie chciałbym...", ru: "В заключение хотелось бы..." }
+];
+
+let state = {
+  currentSection: "ALL",
+  direction: "ru-pl",
+  currentIndex: -1,
+  awaitingNext: false,
+  srsScores: {},
+  session: {
+    correct: 0,
+    wrong: 0
+  }
+};
+
+function init() {
+  const savedScores = localStorage.getItem("srs_polish_scores");
+  if (savedScores) {
+    try {
+      state.srsScores = JSON.parse(savedScores);
+    } catch(e) {
+      state.srsScores = {};
+    }
+  }
+
+  const sectionSelect = document.getElementById("sectionSelect");
+  const uniqueSections = [...new Set(VOCABULARY_DATA.map(i => i.s))];
+  
+  const allOpt = document.createElement("option");
+  allOpt.value = "ALL";
+  allOpt.textContent = "Все разделы (B1)";
+  sectionSelect.appendChild(allOpt);
+
+  uniqueSections.forEach(sec => {
+    const opt = document.createElement("option");
+    opt.value = sec;
+    opt.textContent = sec;
+    sectionSelect.appendChild(opt);
+  });
+
+  sectionSelect.addEventListener("change", (e) => {
+    state.currentSection = e.target.value;
+    loadNextWord();
+  });
+
+  const dirSelect = document.getElementById("directionSelect");
+  dirSelect.addEventListener("change", (e) => {
+    state.direction = e.target.value;
+    const diacritics = document.getElementById("diacriticsBar");
+    diacritics.style.display = state.direction === "ru-pl" ? "grid" : "none";
+    loadNextWord();
+  });
+
+  updateDashboard();
+  loadNextWord();
+}
+
+function saveScores() {
+  localStorage.setItem("srs_polish_scores", JSON.stringify(state.srsScores));
+}
+
+function getFilteredPool() {
+  return VOCABULARY_DATA.filter(item => {
+    if (state.currentSection !== "ALL" && item.s !== state.currentSection) return false;
+    const score = state.srsScores[item.pl] || 0;
+    return score < 3;
+  });
+}
+
+function updateDashboard() {
+  document.getElementById("sessionCorrect").textContent = state.session.correct;
+  document.getElementById("sessionWrong").textContent = state.session.wrong;
+  document.getElementById("sessionTotal").textContent = state.session.correct + state.session.wrong;
+
+  const totalInSection = VOCABULARY_DATA.filter(item => 
+    state.currentSection === "ALL" || item.s === state.currentSection
+  );
+  const mastered = totalInSection.filter(item => (state.srsScores[item.pl] || 0) >= 3);
+  
+  const total = totalInSection.length;
+  const countMastered = mastered.length;
+  const countRemaining = total - countMastered;
+
+  document.getElementById("wordsRemaining").textContent = countRemaining;
+  document.getElementById("overallRatio").textContent = `${countMastered} / ${total}`;
+  
+  const pct = total > 0 ? (countMastered / total) * 100 : 0;
+  document.getElementById("progressBar").style.width = pct + "%";
+}
+
+function resetSessionStats() {
+  state.session.correct = 0;
+  state.session.wrong = 0;
+  updateDashboard();
+}
+
+function resetVisualStates() {
+  const card = document.getElementById("cardContainer");
+  const input = document.getElementById("userInput");
+  const actionBtn = document.getElementById("actionBtn");
+  const feedbackBox = document.getElementById("feedbackBox");
+
+  card.classList.remove("state-success", "state-error");
+  input.classList.remove("input-success", "input-error");
+  actionBtn.classList.remove("btn-success", "btn-error");
+
+  feedbackBox.className = "feedback-box";
+  feedbackBox.style.display = "none";
+  feedbackBox.innerHTML = "";
+}
+
+function loadNextWord() {
+  state.awaitingNext = false;
+  resetVisualStates();
+  
+  const actionBtn = document.getElementById("actionBtn");
+  actionBtn.textContent = "Проверить";
+  
+  const input = document.getElementById("userInput");
+  input.value = "";
+  input.disabled = false;
+
+  updateDashboard();
+  const pool = getFilteredPool();
+
+  if (pool.length === 0) {
+    document.getElementById("promptSideLabel").textContent = "Статус";
+    document.getElementById("promptTerm").textContent = "Все слова раздела выучены!";
+    input.style.display = "none";
+    actionBtn.style.display = "none";
+    return;
+  }
+
+  input.style.display = "block";
+  actionBtn.style.display = "block";
+
+  const nextItem = pool[Math.floor(Math.random() * pool.length)];
+  state.currentIndex = VOCABULARY_DATA.findIndex(i => i.pl === nextItem.pl && i.ru === nextItem.ru);
+
+  if (state.direction === "ru-pl") {
+    document.getElementById("promptSideLabel").textContent = "Русский (Слепой лист)";
+    document.getElementById("promptTerm").textContent = nextItem.ru;
+  } else {
+    document.getElementById("promptSideLabel").textContent = "Польский";
+    document.getElementById("promptTerm").textContent = nextItem.pl;
+  }
+}
+
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")
+    .replace(/\s+/g, " ");
+}
+
+function checkAccuracy(userVal, targetVal) {
+  const cleanUser = normalize(userVal);
+  const rawVariants = targetVal.split(/[\/;]/);
+  const variants = rawVariants.map(v => normalize(v));
+
+  if (variants.includes(cleanUser)) return true;
+  if (normalize(targetVal) === cleanUser) return true;
+
+  const joinedDirect = targetVal.split("/").map(v => normalize(v)).join(" ");
+  return cleanUser === joinedDirect;
+}
+
+function handleAnswer(event) {
+  event.preventDefault();
+  
+  if (state.awaitingNext) {
+    loadNextWord();
+    return;
+  }
+
+  const currentItem = VOCABULARY_DATA[state.currentIndex];
+  const input = document.getElementById("userInput");
+  const card = document.getElementById("cardContainer");
+  const actionBtn = document.getElementById("actionBtn");
+  const feedbackBox = document.getElementById("feedbackBox");
+
+  const val = input.value;
+  const targetAnswer = state.direction === "ru-pl" ? currentItem.pl : currentItem.ru;
+  const isCorrect = checkAccuracy(val, targetAnswer);
+  const wordKey = currentItem.pl;
+  const currentStreak = state.srsScores[wordKey] || 0;
+
+  if (isCorrect) {
+    state.session.correct++;
+    state.srsScores[wordKey] = currentStreak + 1;
+    card.classList.add("state-success");
+    input.classList.add("input-success");
+    actionBtn.classList.add("btn-success");
+    feedbackBox.className = "feedback-box success";
+    feedbackBox.innerHTML = `
+      <div class="feedback-header">✓ Абсолютно верно</div>
+      <div>Серия правильных ответов: <b>${state.srsScores[wordKey]} из 3</b></div>
+      <div class="comparison-grid">
+        <div class="comp-row">
+          <span class="comp-label">Эталон:</span>
+          <span class="comp-value">${targetAnswer}</span>
+        </div>
+      </div>
+    `;
+  } else {
+    state.session.wrong++;
+    state.srsScores[wordKey] = 0;
+    card.classList.add("state-error");
+    input.classList.add("input-error");
+    actionBtn.classList.add("btn-error");
+    feedbackBox.className = "feedback-box error";
+    feedbackBox.innerHTML = `
+      <div class="feedback-header">✕ Ошибка в правописании</div>
+      <div>Счетчик сброшен до <b>0 из 3</b>.</div>
+      <div class="comparison-grid">
+        <div class="comp-row">
+          <span class="comp-label">Ваш ввод:</span>
+          <span class="comp-value" style="color: #fca5a5;">${val || "—"}</span>
+        </div>
+        <div class="comp-row">
+          <span class="comp-label">Правильно:</span>
+          <span class="comp-value" style="color: #86efac;">${targetAnswer}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  saveScores();
+  updateDashboard();
+  
+  state.awaitingNext = true;
+  input.disabled = true;
+  actionBtn.textContent = "Дальше ➔";
+}
+
+function insertChar(char, event) {
+  if (event) event.preventDefault();
+  const input = document.getElementById("userInput");
+  if (input.disabled) return;
+  const start = input.selectionStart || input.value.length;
+  const end = input.selectionEnd || input.value.length;
+  const val = input.value;
+  input.value = val.substring(0, start) + char + val.substring(end);
+  input.selectionStart = input.selectionEnd = start + 1;
+}
+
+function resetProgress() {
+  const totalInSection = VOCABULARY_DATA.filter(item => 
+    state.currentSection === "ALL" || item.s === state.currentSection
+  );
+  totalInSection.forEach(item => {
+    delete state.srsScores[item.pl];
+  });
+  saveScores();
+  loadNextWord();
+}
+
+window.onload = init;
+</script>
+</body>
+</html>
